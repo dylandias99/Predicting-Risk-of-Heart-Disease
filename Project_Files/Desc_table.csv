@@ -1,0 +1,17 @@
+﻿Attribute Name/Type,Data Type,Description,Number of Distinct Values
+sex,Integer,Gender of the patient,2
+age,Integer,Age of the patient,39
+education,Integer,Level of education of the patient,5
+currentSmoker,Integer,Check whether or not the patient is a current smoker,2
+cigsPerDay,Integer,The number of cigarettes a patient smokes on a daily basis,34
+BPMeds,Integer,Check whether ot the patient was on blood pressure medication,3
+"prevalentStroke	",Integer,Check whether the patient previously had a stroke,2
+prevalentHyp,Integer,Check whether or not the patient previously was hypertensive,2
+diabetes,Integer,Check whether or not the patient previously had diabaties ,2
+totChol,Integer,Total cholesterol level of the patient,249
+sysBP,Numeric,Systolic Blood Pressure of the patient,234
+diaBP,Numeric,Diastolic Blood Pressure of the patient,146
+BMI,Numeric,Body Mass Index of the patient,1365
+heartRate,Integer,Heart Rate of the patient,74
+glucose,Integer,Glucose level of the patient,144
+TenYearCHD,Integer,Indicator label tells whether the patient is at a 10 year risk of coronary heart disease,2

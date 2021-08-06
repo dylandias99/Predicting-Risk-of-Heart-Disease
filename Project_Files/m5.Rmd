@@ -1,0 +1,630 @@
+---
+title: 'Milestone 5: Final Project Paper'
+subtitle: "Predicting Risk of Developing Heart Disease"
+author: "Dylan Dias, Chaitanya Patel, Thulasi Amaraneni, Mihir Manjrekar"
+date: "June 2021"
+header-includes:
+    - \usepackage{bbm}
+    - \usepackage{booktabs}
+    - \usepackage{sectsty} 
+      \allsectionsfont{\centering}
+output:
+    pdf_document:
+    latex_engine: xelatex
+bibliography: references.bib  
+---
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(echo= TRUE, warning=FALSE, message=FALSE)
+```
+
+\allsectionsfont{\centering}
+# Milestone 1: Project Proposal 
+
+\allsectionsfont{\raggedright}
+## 1 Description
+
+Over the years there has been a large increase in the use of machine learning technologies in the field of health care. Health care generates huge amounts of data which consists of a variety of features of an individual patient which can be used for predictive analysis. This will help doctors to get a better insight of the patients health and the necessary medications can be provided to the patient to improve their health. For this project we are mainly focusing on predictive analysis of heart disease on the basis of patients various features.The term ‘heart disease’ refers to several unhealthy conditions of the heart. It is the most common reason for human death. Usually, women above the age of 45 and men above the age of 50 are most vulnerable to heart disease but there are high chances that it can affect anyone. Many risk factors like age, gender, obesity, unhealthy diet, hereditary, cigarette smoking, alcohol consumption, blood pressure and physical inactivity come into consideration when checking for cardiovascular diseases. The important issue about saving a patients life is the amount of time it takes for them to reach the hospital. It is a very challenging for doctors to diagnose this disease in its early stages. So in order to make their jobs more feasible we will be making use of various statistical and data mining tools to help predict the risk of developing heart disease. Our proposed solution predicts whether a patient has a risk of developing coronary heart disease in the near future by considering his/her risk factor attributes. This can help avoid incidents from being fatal.
+
+## 2 Motivation
+In this era to solve many medical problems many machine learning algorithm models are used. This helps in understanding the medical conditions of individual for efficient diagnosis of diseases and can suggest patients about a healthy living. Heart disease being one of the chronic diseases among individuals needs to be given necessary attention. This project’s main motivation is to predict the occurrence of heart disease over a 10year period by analyzing several factors of an individual’s habits like age, gender, obesity, unhealthy diet, hereditary, cigarette smoking, alcohol consumption, blood pressure and physical inactivity come into consideration when checking for cardiovascular diseases. To avoid any sort of delays because of any factors of a patient and diagnose the disease in early stages, more attention should be given to analyzing the data and identifying patterns that might be of useful insights.
+
+In every hospital/clinic each transaction of a patient is a useful data. Instead of neglecting the data we can process the data and make it ready for analyzing through various techniques. So, it’s very important to consider the chunks of all the patient’s useful information and identify patterns which help in making efficient decisions.
+
+## 3 Problem Definition
+Many hospitals tend to collect patients’ data to maintain records. That data can be used to answer simple queries about the patient’s history and about their respective disease like the age, gender, past medications etc. These can help in answering simple questions like the average age of patients having heart disease, ratio of heart diseases among males and females, the gender which is most affected by heart disease. But its hard to respond to complex queries which involve in predicting the occurrence of heart diseases over a span of period, the treatment recommended to the patient with the given history of his condition.
+
+All the decisions for the complex queries are taken by the doctor based on his experience and the recorded data is not taken into consideration most of the time. This practice leads to imperfect results which are not precise and often effects the quality of the diagnosing. So, to minimize these errors and to promote efficient consulting for patient’s computer data support is necessary. We can implement data mining techniques and build machine learning models to extract knowledgeable insights from our medical data. This helps doctors to make effective decisions to treat the patients by improving decision making in the medical field.
+
+## 4 Related Work and their limitations
+There is fair enough amount of work done on heart disease risk prediction over the years. Some approaches are similar or  are combination of different methods which we will be using. Hybrid models are used to get the better out of more than one approach. 
+
+@kim2015data uses an combination of decision trees and fuzzy logic. It uses decision tree to construct a rule base and the rule base is then inferred by a fuzzy rule bases system where these rules go through fuzzification to convert crisp data into fuzzy logic, an inference engine is then used to find the best possible match between data and the rules which are then defuzzified to get the predictions. Although using decision trees can be tricky sometimes, since a small change in the data can lead to large change in the overall tree structure and when handling big amount of data it can result in far more complex rules than needed. Also fuzzy logic is not always accurate since its results are based on assumptions and fuzzy based knowledge systems are inferior in terms of recognizing patterns compared to machine learning practices like neural networks.
+
+@tasnim2021comparative uses a combination of random forest and decision trees, it uses random forest model for feature selection and then uses decision trees for classification. This approach very is simple, a RF model is used to extract important features, it takes in different subsets of features and generates n trees, the RF classifier calculates a support for each feature which states the importance of the feature. Once the features are selected it uses decision tree learning to generate a tree to classify the data. Since random forest consists of a large number of decision trees it comprises of the same problems that are face by decision trees i.e. due to high complexity of large datasets, any change in the data can influence many trees generated by the model. So as the data sample increases this approach may not be that useful.  
+
+## 5 Approach
+We pre-processed the data to encode the feature vectors to numeric type if they are numeric and factor type if they are categorical.
+
+We evaluated the data to measure the amount of missing values using the vis_miss function. Missing data creates imbalanced observations and causes biased estimates or could lead to invalid conclusions. Upon discovering a considerable amount of them, we decided to predict the missing values with the help of the mice package. This will help overcome issues like imbalanced observations and biased estimates that could lead to invalid conclusions.
+
+For performing exploratory data analysis, we plotted our data for visualizations and a correlation heat map. This helped us learn more about the data set at hand and get an idea about which features could be more important for our analysis.
+
+We selected four candidate algorithms to implement, Logistic Regression, Naive Bayes, K-Means and Support Vector Machine initially. We decided to divide them an among us after performing. Finally we compared the accuracies of each algorithm. 
+
+For our first model, we choose the logistic regression using glm function. We run the model on all values and based on the p-value we use the most significant variables . A summary of the model indicates that male, age, cigsPerDay, prevalentStroke, sysBP, and glucose to be the most significant. We split the data into training and testing data sets. We built a model based on only these variables using the training data and predicted the value of the TenYearCHD variable of the testing data. We use these predicted values determine the accuracy of the model using the confusion matrix. 
+
+For our second model, we implemented the naive bayes algorithm. Using the TenYearCHD as the target attribute we trained a naive bayes model with the training data. Then we used this classifier to predict the values for the testing data and compared them to the original target values. Then we obtained the accuracy of this classifier using the confusionMatrix function.
+
+For our third model, we implemented K means clustering. K Means utilizes the Euclidean distance to measure the proximity of data points. We need to normalize the data for which we wrote a function that we applied to all the feature vectors. For the K means model, we use the number of centers as 2 because we know from our domain knowledge that there are only 2 clusters in the data. We are setting the nstart attribute to 20 as we wanted to limit the random restarts to a lower value as a higher value was not improving the results. Using the confusion matrix of the predicted values and the target values we get the accuracy for this model.
+
+For our fourth model, we implemented Support vector machines. We split the data into training and testing data sets and feature scaling is carried out on both of them. We use the trainControl method to define 5 repetitions of 10 fold cross validation to be performed for training and the train function is used to train and tune a SVM model with a radial kernel. In the first training attempt we let the model use default sigma and arbitary C values. In the second training attempt we use the tuneGrid parameter to use a combination of the values of sigma of around 0.068 and C of around 1. This gives us the model with the best ROC for the parameters used. This model is used to predict on the test data and the results are compared with the target feature to get the accuracy from the confusion matrix.
+
+For the last algorithm we chose Neural networks. It requires all our attributes to be numeric and we further we applied min-max normalization on our features for scaling. We split the data into training and testing data sets. For training, we use a feed-forward network having 15 input neurons, 2 output neurons and one hidden layer containing 8 neurons. We have used the back-propagation algorithm to update our weights with a learning rate of 0.005, cross-entropy loss is the error function with the sigmoid activation function used in the neurons. Since the package we used for neural networks has some open issues we weren't able set particular values as parameters.
+
+## 6 Key issues and alternate ways to resolve those issues
+Since heart disease is considered as one of the most impactful chronic diseases, diagnosing it needs to be taken care of in early stages. Attributes like age, gender, obesity, unhealthy diet, hereditary, cigarette smoking, alcohol consumption, blood pressure and physical inactivity are to be considered for the prediction. After pre-processing the data, based on the parameters in the dataset we will be training our model by building machine learning algorithms and with the help of test data we will be predicting the results of our model. By evaluating the accuracy, we can choose the best model. The machine learning algorithms that we implemented in the project include Naïve Bayes, Logistic Regression, K-means, SVM and neural networks. In all these algorithms we will be splitting our dataset into training and testing data, implement scaling, build the model, and evaluate the accuracy of all the models.
+
+## 7 System Functions
+Our system applies data mining techniques to extract useful insights and patterns from the data. Through supervised learning, we can train our model and then by applying classification algorithms, predictions can be made. By analyzing the performance of classification algorithms (Decision Tree, Naïve Bayes, etc.) on our data and taking the accuracy of algorithms into consideration we can evaluate each model with the help of the best-fit algorithm.
+We plan on examining various features from the data-set which will then be applied to 5 algorithms into order to see which one will be the best fit for the system. The main goal is to use this data to predict if a patient is at risk of developing a heart disease. We will be making use of the following algorithms Support Vector Machine, Neural Nets, Random Forest, Naive Bayes and Logistic Regression. We have decided to use supervised algorithms for now since the task is mostly classification, but we will progressively look for more algorithms to test like trying to use unsupervised algorithms for this case.
+
+## 8 Uses
+It is very important to have a tool that predicts (with high accuracy) the unhealthy heart as it can help the individuals as well as doctors in early diagnosis of the heart disease. It is also important to have a low false negative rate for our model as missing out on predicting any patients heart disease could cost a human life. Also, we will analyze various patterns in our data-set to check which people are more vulnerable (based on age and gender) to heart diseases so that they can plan a healthy living. Accurate predictions could lead the person to change their lifestyle and seek out medical help early which could reduce the death rates due to cardiovascular diseases.
+
+## 9 Dataset
+For this project, we opted for the Framingham Heart Study data-set which comprises of numerical and categorical data. It consists of 4240 records with 15 features. Each record contains categorical data (gender, age, education) of an individual as well as his/her health factors (like blood pressure, cigarette consumption, stroke rate, cholesterol, etc.). The features were selected over a wide range of study on individuals who have gone through a heart stroke and those who haven’t. The description for each feature is given below: 
+
+Dataset link: [Heart_Disease_Risk_Dataset](https://biolincc.nhlbi.nih.gov/studies/framcohort/)
+
+* Age : The study was conducted on individual with age ranging from 29 to 62.
+* Sex : The gender of the induvidual is given as 1 = male, 2 = female.
+* Systolic Blood Pressure(sysBP) : It is the measure of the force exerted by the heart on the walls of arteries each time it beats.
+* Diastolic Blood Pressure(diaBP) : It is the measure of the force exerted by the heart on the walls of arteries in between beats.
+* Total Cholesterol(chol) : It's the measure of cholesterol level in blood.
+* Body Mass Index(bmi) : body mass index of the individual.
+* currentSmoker : 1 = yes, 0 = no.
+* cigsPerDay : Numerical value, Number of cigarettes smoked by the individual per day.
+* Blood Pressure Medication(BPmeds) : number of blood pressure medications the individual had over 10 years.
+* Prevalent Stroke : History of strokes.
+* diabetes : 1 = yes, 0 = no.
+* heart rate : heart rate of the individual.
+* glucose : glucose in blood, numeric value.
+* Prevalent Hypertension : Does the individual have high blood pressure, 1 = yes, 0 = no.
+* TenYearCHD : Congenital heart disease, 1 = yes, 0 = no. 
+
+## 10 Algorithms
+
+We are going to test the following Algorithm for this use case:
+
+### 10.1 Logistic regression
+The logistic regression model is a classification algorithm which is mostly used in  predicting  the probability of the binary classes. For example, predicting whether a patient has 10-year risk of developing coronary heart disease (CHD).
+
+### 10.2 Support Vector Machine
+It is a supervised machine learning algorithm that can be used for  classification or regression problems. We treat each data item as  a point in n-dimensional space where n is the number of features that distinctly classifies each data point. We then find the hyper plane that helps to distinguish between the data points with the largest amount of margin.
+
+### 10.3 Naive Bayes
+The Naive Bayes classifier is a probabilistic machine learning model based on Bayes Theorem which assumes that the predictors are independent i.e. each feature in a class is not related to other features present. For example, classify whether the day is suitable for playing golf, given the features of the day like humidity, windy and temperature.
+                
+### 10.4 Random Forest
+Random forest is an ensemble learning method which consists of many decision trees. These individual decision trees are able to compute their own predictions. For the final prediction the random forest classifier aggregates the prediction of the individual decision trees.
+                
+### 10.5 Neural Network
+Neural Network is an information processing model that has the ability to learn by analyzing training examples. They are able to identify complex patterns in the dataset using hidden layers and activation functions. Some neural network applications include image processing, character recognition etc.
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+\allsectionsfont{\centering}
+# Milestone 2: Data summary/visualization 
+
+\allsectionsfont{\raggedright}
+This project is based on *"Predicting risk of heart disease"* available on National Heart Lung and Blood Institute. 
+
+URL :https://biolincc.nhlbi.nih.gov/studies/framcohort/
+
+## Imported Libraries \
+List of libraries that need to be installed to run this file
+
+```{r libraries,include=TRUE, message=FALSE}
+library(kableExtra)
+library(plyr)
+library(tidyverse)
+library(gmodels)
+library(ggmosaic)
+library(corrplot)
+library(mice)
+library(caret)
+library(rpart)
+library(cluster)
+library(fpc)
+library(data.table)
+library(knitr)
+library(naniar)
+library(visdat)
+library(Hmisc)
+library(shiny)
+library(caTools)
+library(corrplot)
+library(e1071)
+library(naivebayes)
+library(neuralnet)
+library(GGally)
+library(pROC)
+```
+
+## Dataset \
+The dataset we are using is from Framingham Heart Study data-set which comprises of numerical and categorical data. It consists of 4240 records with 15 features. Each record contains categorical data (gender, age, education) of an individual as well as his/her health factors (like blood pressure, cigarette consumption, stroke rate, cholesterol, etc.). The features were selected over a wide range of study on individuals who have gone through a heart stroke and those who haven’t which is signified with the variable *TenYearCHD*. 
+
+The dataset structure is given below: 
+The `read.csv()` command imports the dataset.
+
+```{r dataset}
+framingham <- read.csv("framingham.csv", header = T)
+```
+
+Checking the number of rows and columns in the dataset
+
+```{r colsandrows}
+ncol(framingham)
+nrow(framingham)
+```
+
+Data-set structure
+
+```{r structure}
+str(framingham)
+summary(framingham)
+```
+
+In order to prepare the data for pre-processing we will convert the attributes to factors. We have also removed the education column from the data-set. As there is no relation between education and heart disease.
+
+```{r convert_data_to_Factor}
+framingham$male = as.factor(framingham$male)
+framingham$education = as.factor(framingham$education)
+framingham$currentSmoker = as.factor(framingham$currentSmoker)
+framingham$BPMeds = as.factor(framingham$BPMeds)
+framingham$prevalentStroke = as.factor(framingham$prevalentStroke)
+framingham$prevalentHyp = as.factor(framingham$prevalentHyp)
+framingham$diabetes = as.factor(framingham$diabetes)
+framingham$glucose = as.numeric(framingham$glucose)
+framingham$heartRate = as.numeric(framingham$heartRate)
+framingham$totChol = as.numeric(framingham$totChol)
+framingham$cigsPerDay = as.numeric(framingham$cigsPerDay)
+framingham$age = as.numeric(framingham$age)
+framingham$TenYearCHD = as.factor(framingham$TenYearCHD)
+framingham_new <- framingham[,-c(3)]
+```
+
+Checking for missing values present in the data-set
+
+```{r vismissdata, echo= FALSE, fig.align='center', fig.height=3}
+vis_miss(framingham_new, cluster = TRUE, sort_miss = TRUE)
+```
+From the missing data plot, we can see that there is 0.8% missing data present in the data-set. In order to deal with missing values we will make use of the mice function to predict them. 
+```{r missing_values, results="hide"}
+new_dataset <- mice(framingham_new, m = 5, method = c("", "", "", "pmm", "logreg", "", "", "", "pmm", "", "", "pmm","pmm","pmm",""), maxit = 20)
+final_cleaned <- mice::complete(new_dataset, 2)
+```
+
+## Visualizations
+This plot shows the distribution of the data. The data is fairly distributed for features like *age*, *BMI*, *cigsPerDay*, *diaBP*, *sysBP*, *male*, *heartRate*, *totChol* and it also has features with unbalanced data distribution like *BPMeds*, *glucose*, *prevalentHyp*, *prevalentStroke* and *TenYearCHD*
+
+```{r distribution_plot, echo=FALSE, fig.width=7, fig.height=4}
+one_fram <- final_cleaned
+vis_fram <- data.frame(one_fram)
+
+df2 = as.data.frame(sapply(vis_fram, as.integer))
+
+ggplot(gather(df2), aes(value)) + 
+    geom_histogram(bins = 10, fill="#00bfc4",
+  stat = "count") + 
+    facet_wrap(~key, scales = 'free_x')
+```
+The box plots below shows that there are outliers present in the following features cigPerDay, totChol, sysBP, diaBP, BMI, heartRate, and glucose
+```{r box-plot, echo=FALSE, fig.width=7, fig.height=3, fig.align="left"}
+boxplot(final_cleaned,col='#00bfc4')
+```
+To select which feature will be useful, we plotted a correlation heat map. Columns *currentSmoker* and *cigsPrDay* shows almost the same results as *education* but show some correlation with *heartRate* and *TenYearCHD* which are some important features to take into consideration for heart disease prediction, so based on the correlation map we have decided to remove *education* but keep *currentSmoker* and *cigsPrDay* cause they show slight correlation with some important features.
+
+```{r corr_matrix, echo=FALSE, fig.width=7, fig.height=4}
+cor_martix <- cor(df2)
+corrplot(cor_martix, method="color", tl.col = "black")
+```
+
+The bar plot below indicates that there are 3596 without heart disease and 644 patients with the disease
+```{r bar_plot, echo=FALSE, fig.height=4, fig.width=7, fig.align='center'}
+vis_fram %>% ggplot(aes(x=TenYearCHD, fill = TenYearCHD)) + geom_bar(width = 0.5, position = position_dodge(0.8) ) + scale_fill_discrete(name = "Heart Disease", labels = c("0 : Doesn't have a heart disease", "1 : Has a heart disease")) + annotate("text", x = 1, y= 3400, label = "3596", color="white") + annotate("text", x = 2, y=448, label = "644", color="white") + ggtitle("Risk of heart disease")
+```
+
+This group bar graph below visualizes  number of people having heart diseases Vs their age.
+From the visualization we can say that heart disease rate is higher among people with no history of Coronary Heart Disease while in their late 40's and people with a history of Coronary Heart Disease have a larger distribution between their 50's and 60's. 
+
+```{r groupedbarplot_age_heart, echo=FALSE, fig.height=3, out.width="100%", fig.align='center'}
+counts <- table(vis_fram$TenYearCHD, vis_fram$age)
+barplot(counts, main="Heart Diseases Vs Age.",
+  xlab="Age", ylab="Coun", col=c("#F8766D","#00bfc4"),
+  legend = rownames(counts), beside=TRUE)
+```
+
+This group bar graph visualizes of people who are smokers Vs their age. As heart disease rate might be directly proportional to the smoking habits of a person we performed visualization of smokers Vs their age, we can see this same relation in the correlation map where it shows that both the smoking related features only show positive correlation towards heart rate. From the visualization we can say that people who are between the age group of late 30's and early 60's smoke a-lot.
+
+```{r groupedbarplot_age_smoker, echo=FALSE, fig.height=4, fig.width=7, fig.align='center'}
+counts <- table(vis_fram$currentSmoker, vis_fram$age)
+barplot(counts, main="Current Smoker Vs Age.",
+  xlab="Age", ylab="Count", col=c("#F8766D","#00bfc4"),
+  legend = rownames(counts), beside=TRUE)
+```
+
+This group bar graph visualizes of people having diabetes Vs TenYearCHD
+As heart disease might be directly proportional to diabetes of a person we have created visualization of people having diabetes Vs TenYearCHD. From the visualization we can say that out of 102 people who are having diabetes, 36 people are having the risk of heart disease in a 10 year period.
+
+
+
+```{r groupedbarplot_diabetes_heart, echo=FALSE, fig.height=3, fig.width=7, fig.align='center'}
+counts <- table(vis_fram$diabetes, vis_fram$TenYearCHD)
+barplot(counts, main="Diabeties Vs Age.",
+  xlab="Age", ylab="Count", col=c("#F8766D","#00bfc4"),
+  legend = rownames(counts), beside=TRUE)
+```
+
+From the grouped violin plot below, we can say that mean age of people who smoke is less than the mean age of people who don't for people with and without heart disease. We can also see that people who are smokers having risk of heart disease are between the age of 45-60. But non-smokers having risk of heart disease are between the age of 55-65.
+
+```{r voilinplot, echo=FALSE, fig.height=3, fig.width=7, fig.align='center'}
+p <- ggplot(final_cleaned, aes(x=TenYearCHD, y=age, fill=currentSmoker)) + # fill=name allow to automatically dedicate a color for each group
+  geom_violin()
+p
+```
+
+
+
+
+
+
+
+
+
+
+
+
+\allsectionsfont{\centering}
+# Milestone 3: Algorithm Testing
+
+\allsectionsfont{\raggedright}
+## Logistic Regression
+
+We build a logistic regression model using *glm* function which is used to fit generalize linear models. We first run the model for all the variables in the data-set and get a summary to see the significance of each variable, the significance is based on the p-value lower than 1. We plan on using the most significant variables in the dataset and compare each models performance on the test data-set.
+```{r imp_feature}
+glm.fit <- glm(TenYearCHD ~ ., data=final_cleaned, family="binomial")
+summary(glm.fit)
+```
+We then build the model using only the significant variables
+```{r log_model}
+set.seed(123)
+index = createDataPartition(final_cleaned$TenYearCHD, p = 0.70, list = FALSE)
+log_train = final_cleaned[index, ]
+log_test = final_cleaned[-index, ]
+
+glm.fit1 <- glm(TenYearCHD ~ male + age + cigsPerDay + prevalentStroke + sysBP + glucose, data=log_train, family="binomial")
+summary(glm.fit1)
+
+glm.probs <- predict(glm.fit1, newdata = log_test, type="response",family = binomial(link="logit"), control = list(trace=TRUE))
+```
+We then calculate the accuracy of the model using the confusion matrix
+```{r logit_model_accuracy}
+glm.pred <- ifelse(glm.probs > 0.5, "TRUE", "FALSE")
+log_cm <- table(glm.pred,log_test$TenYearCHD)
+log_cm
+
+log_acc <- (log_cm[1] + log_cm[4]) / sum(log_cm) * 100
+log_acc
+```
+We got a 85% accuracy in the logistic regression model
+
+## Naive Bayes
+
+Preparing the dataset for implementing naive bayes algorithm. The data is splitted into testing and training data for the model with the ratio being 70:30.
+
+```{r data modelling/data splicing}
+set.seed(123)
+split <- sample.split(final_cleaned, SplitRatio = 0.7)
+train <- subset(final_cleaned, split==TRUE)
+test  <- subset(final_cleaned, split==FALSE)
+
+x = train[-15]
+
+y = train$TenYearCHD
+
+y <- as.factor(y)
+```
+We have implemented naive bayes algorithm on the dataset and built the following model which resulted the confusion matrix and the accuracy for our dataset.
+
+```{r naive bayes accuracy}
+naive_bayes <- naiveBayes(x,y)
+
+set.seed(123)  # Setting Seed
+classifier_cl <- naiveBayes(TenYearCHD ~ ., data = train)
+classifier_cl
+
+y_pred <- predict(classifier_cl, newdata = test)
+
+cm <- table(test$TenYearCHD, y_pred)
+cm
+```
+
+```{r Model Evaluation}
+confusionMatrix(cm)
+```
+
+The overall accuracy that we gained through this model is nearly 81%
+
+## K-means Clustering
+
+Below we performed k-means on our data-set we need to standardize our feature for the better implementation of the Euclidian distance in the algorithm
+```{r standardize_kmean}
+kmeans_data <- final_cleaned
+normalize <- function(x) {
+  return((x-min(x))/ (max(x) - min(x)))
+}
+
+kmeans_data$age <- normalize(kmeans_data$age)
+kmeans_data$cigsPerDay <- normalize(kmeans_data$cigsPerDay)
+kmeans_data$totChol <- normalize(kmeans_data$totChol)
+kmeans_data$sysBP <- normalize(kmeans_data$sysBP)
+kmeans_data$diaBP <- normalize(kmeans_data$diaBP)
+kmeans_data$BMI <- normalize(kmeans_data$BMI)
+kmeans_data$heartRate <- normalize(kmeans_data$heartRate)
+kmeans_data$glucose <- normalize(kmeans_data$glucose)
+```
+
+We build the K-Means Model using the kmeans() function and we have assigned K as 2, since we know our data-set consist of only 2 predictors i.e either a patient has a heart disese or he doesn't.
+
+```{r }
+set.seed(240) # Setting seed
+kmeans.re <- kmeans(kmeans_data, centers = 2, nstart = 20)
+```
+
+Computing the confusion matrix for the model
+
+```{r K-means confusion matrix}
+km_cm <- table(kmeans_data$TenYearCHD, kmeans.re$cluster)
+km_cm
+```
+```{r accuracy calculation}
+kmeans_acc = sum(diag(km_cm))/sum(km_cm) * 100
+kmeans_acc
+```
+The accuracy gained from k-means clustering is nearly 51%
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+\allsectionsfont{\centering}
+# Milestone 4: Core Algorithm Tuning
+
+\allsectionsfont{\raggedright}
+## Support Vector Machine
+One of the efficient algorithm that we would like to use on our dataset is SVM. Here the data points are separated by hyperplane with maximum margin.For understanding model performance, we will be splitting our data in the ratio of 70:30 for training and testing purposes.
+```{r train & test data}
+set.seed(123) # original dataset
+split = sample.split(final_cleaned, SplitRatio = 0.70);
+train_1 = subset(final_cleaned, split == TRUE);
+test_1 = subset(final_cleaned, split == FALSE);
+```
+Feature scaling is done for our training and testing data so that all the features are normalized and contribute proportionally to the final result.
+```{r feature scaling}
+cols <- c("cigsPerDay","totChol","diaBP","BMI","heartRate","glucose")
+levels(train_1$TenYearCHD) <- c("no","yes")
+levels(test_1$TenYearCHD) <- c("no","yes")
+```
+SVM model will be implemented by importing SVM module, passing radial kernel (for creating support vector classifier object) in svm() function. And we can fit the training data in our model and further evaluate it.
+```{r svm model}
+ctrl <- trainControl(method="repeatedcv", repeats=5, summaryFunction=twoClassSummary, classProbs=TRUE)
+
+svm.tune <- train(TenYearCHD~.,data = train_1,method = 'svmRadial',truelength = 9,preProc = c('center','scale'),metric = 'ROC',trControl = ctrl)
+
+grid <- expand.grid(sigma = c(0.057,0.068,0.077),C = c(0.75, 0.9, 1, 1.1, 1.25))
+
+svm.tuneRD <- train(TenYearCHD~.,data = train_1,method = 'svmRadial',truelength = 9,preProc = c('center','scale'),metric = 'ROC',trControl = ctrl,tuneGrid = grid)
+
+msvm1<- svm(formula = train_1$TenYearCHD ~ .,
+         data = train_1,
+         type = 'C-classification',
+         kernel = 'radial'); 
+msvm1
+```
+By comparing tune parameters we set the cost, sigma, and predicted values of the test and calculate the accuracy.
+```{r evaluation1}
+pred_svm1 <- predict(msvm1, test_1)
+confusionMatrix(table(pred_svm1, test_1$TenYearCHD))
+```
+
+The overall accuracy that we gained through this model is nearly 84%
+
+## Neural Networks
+
+## Data Preprocessing
+Since we will be using NN, all our attributes need to be numeric, so we converted all attributes to numeric, we further use min-max normalization on our data for it to better fit model. Once normalization is done we have split the data into training and testing in 70% to 30% ratio.
+```{r nn_dp}
+nn_data <- final_cleaned
+nn_data$male = as.numeric(nn_data$male)
+nn_data$currentSmoker = as.numeric(nn_data$currentSmoker)
+nn_data$BPMeds = as.numeric(nn_data$BPMeds)
+nn_data$prevalentStroke = as.numeric(nn_data$prevalentStroke)
+nn_data$prevalentHyp = as.numeric(nn_data$prevalentHyp)
+nn_data$diabetes = as.numeric(nn_data$diabetes)
+nn_data$glucose = as.numeric(nn_data$glucose)
+nn_data$heartRate = as.numeric(nn_data$heartRate)
+nn_data$totChol = as.numeric(nn_data$totChol)
+nn_data$cigsPerDay = as.numeric(nn_data$cigsPerDay)
+nn_data$age = as.numeric(nn_data$age)
+
+maxs <- apply(nn_data[0:13], 2, max) 
+mins <- apply(nn_data[0:13], 2, min)
+
+nn_data[1:13] <- as.data.frame(scale(nn_data[1:13], center = mins, scale = maxs - mins))
+
+split = sample.split(nn_data$TenYearCHD, SplitRatio = 0.70)
+train = subset(nn_data, split==TRUE)
+test = subset(nn_data, split==FALSE)
+```
+## Training
+For training we use a simple feed-forward network having 15 neurons in the input layer, 2 neurons in the output layer and one hidden layer containing 8 neurons. We have used back-propagation algorithm to update our weights with a learning rate of 0.005, the error function used is cross-entropy loss, activation function used is sigmoid, we took the default step-size as the weights weren't converging when used a lower max-step size.
+```{r nn_model, eval = FALSE}
+nn <- neuralnet(formula = TenYearCHD~.,data=train,algorithm = "backprop", learningrate = 0.05,err.fct = "ce", linear.output = FALSE,rep=1,stepmax = 1e5 ,threshold =0.5,act.fct='logistic',hidden=c(7))
+```
+Summary of the feed-forward network
+```{r nn_summary, eval = FALSE}
+summary(nn)
+tvals = test[,14]
+mypredict <- compute(nn, test[1:13])$net.result
+
+results <- data.frame(actual = test$TenYearCHD, prediction = mypredict)
+
+mypredict <- data.frame("mypredict"=ifelse(max.col(mypredict[ ,1:2])==1, '1','2'))
+```
+The package used to implement the neural networks hasn't been updated for a while and it has some unresolved issues which arise when the parameters as set to a particular value. 
+
+## Validation
+In oder to validate the performance of the classifiers we used the following statistical parameters:
+
+Accuracy: The accuracy is a measure of correctly classified instances in the dataset. 
+
+Precision: The precision is a measure of the model’s ability to correctly predict the positives out of all the positive prediction it made.
+
+Recall: The recall is a measure of the model’s ability to correctly predict the positives out of actual positives. 
+
+F1-score: The f1-score is a measure of the model’s accuracy on the dataset.
+```{r validation, echo = FALSE}
+svm_cm <- table(pred_svm1, test_1$TenYearCHD)
+
+svm_acc <- (svm_cm[1] + svm_cm[4]) / sum(svm_cm) * 100
+
+log_prec <- (log_cm[1])/ (log_cm[1] + log_cm[2]) * 100
+
+log_rec <- (log_cm[1])/ (log_cm[1] + log_cm[3]) * 100
+
+log_f1 <- (2 * (log_rec * log_prec))/(log_prec + log_rec)
+
+naiv_acc <- (cm[1] + cm[4]) / sum(cm) * 100
+
+naiv_prec <- (cm[1])/ (cm[1] + cm[2]) * 100
+
+naiv_rec <- (cm[1])/ (cm[1] + cm[3]) * 100
+
+naiv_f1 <- (2 * (naiv_rec * naiv_prec))/(naiv_prec + naiv_rec)
+
+km_prec <- (km_cm[1])/ (km_cm[1] + km_cm[2]) * 100
+
+km_rec <- (km_cm[1])/ (km_cm[1] + km_cm[3]) * 100
+
+km_f1 <- (2 * (km_rec * km_prec))/(km_prec + km_rec)
+svm_cm <- table(pred_svm1, test_1$TenYearCHD)
+
+svm_prec <- (svm_cm[1])/ (svm_cm[1] + svm_cm[2]) * 100
+svm_rec <- (svm_cm[1])/ (svm_cm[1] + svm_cm[3]) * 100
+svm_f1 <- (2 * (svm_rec * svm_prec))/(svm_prec + svm_rec)
+```
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+The graph below shows each models accuracy 
+```{r val_acc, echo=FALSE, fig.align='left', fig.height=4, fig.width=7}
+acc_data <- data.frame(
+  models=c("LogReg", "Naive", "K-means", "SVM"),
+  acc=round(c(log_acc,naiv_acc, kmeans_acc, svm_acc), digits = 2)
+)
+
+acc_plot<- ggplot(acc_data, aes(x = models, y = acc)) + geom_col(fill = "#0099f9")+ theme_classic()+ geom_text(aes(label=acc), vjust=1.6, color="white", size=3.5)
+acc_plot
+```
+The graph below shows each models precision 
+```{r val_prec, echo=FALSE, fig.align='left', fig.height=4, fig.width=7}
+prec_data <- data.frame(
+  models=c("LogReg", "Naive", "K-means", "SVM"),
+  prec=round(c(log_prec,naiv_prec, km_prec, svm_prec), digits = 2)
+)
+
+prec_plot<- ggplot(prec_data, aes(x = models, y = prec)) + geom_col(fill = "#0099f9")+ theme_classic()+ geom_text(aes(label=prec), vjust=1.6, color="white", size=3.5)
+prec_plot
+```
+The graph below shows each models recall 
+```{r val_rec, echo=FALSE, fig.align='left', fig.height=4, fig.width=7}
+rec_data <- data.frame(
+  models=c("LogReg", "Naive", "K-means", "SVM"),
+  rec=round(c(log_rec,naiv_rec, km_rec, svm_rec), digits = 2)
+)
+ 
+rec_plot<- ggplot(rec_data, aes(x = models, y = rec)) + geom_col(fill = "#0099f9")+
+  theme_classic()+ geom_text(aes(label=rec), vjust=1.6, color="white", size=3.5)
+rec_plot
+```
+The graph below shows each models f1-score 
+```{r val_f1, echo=FALSE, fig.align='left', fig.height=4, fig.width=7}
+f1_data <- data.frame(
+  models=c("LogReg", "Naive", "K-means", "SVM"),
+  f1_score=round(c(log_f1,naiv_f1, km_f1, svm_f1), digits=2)
+)
+
+f1_plot<- ggplot(f1_data, aes(x = models, y = f1_score)) + geom_col(fill = "#0099f9")+ theme_classic()+ geom_text(aes(label=f1_score), vjust=1.6, color="white", size=3.5)
+f1_plot
+```
+The above graphs represent the accuracy, precision, recall, and f1-score for each model. Since Naive Bayes has the highest recall it can be considered a good model to predict CHD risk among individuals. From the f1 score we can say that logistic regression is the best model for the data-set.
+
+## Conclusion
+We have implemented Logistic Regression, Naive Bayes, K-Means and Support Vector Machine.From these model, we got nearly of 85% accuracy in the Logistic regression model. For Naive Bayes, we got 81% accuracy, not making it better than the Regression model. For K-Means Algorithm, the accuracy is nearly 51%, it was discovered that clustering is not suitable for this dataset. Finally for Support Vector Machine, the results showed an accuracy of 84%, therefore making Logistic Regression the best model for this data-set. 
+
+## Future Work
+The framingham heart disease dataset consists of only 4240 instances and 16 features. The data present in this dataset is very unbalance and size of the data isn't comprehensive enough. In order to get a more generalized classification and prediction accuracy from these models we need to have access to a dataset with more correlated features. This will help in developing more efficient machine learning models to predict heart disease. Further we can try a more hybrid approach where we can use a based model to select the important features and then use those features in other models for classification. 
+
+## Appendix---Code
+
+```{r ref.label=knitr::all_labels(), echo = T, eval = F}
+```
+
+## References
